@@ -1,0 +1,48 @@
+{
+  "name": "pomo",
+  "description": "simple pomodoro timer with slack intergration",
+  "version": "0.0.0",
+  "author": "Adam Hall @AHDesigns",
+  "bin": {
+    "pomo": "./bin/run"
+  },
+  "bugs": "https://github.com/AHDesigns/pomo/issues",
+  "dependencies": {
+    "@oclif/command": "^1",
+    "@oclif/config": "^1",
+    "@oclif/plugin-help": "^2",
+    "@types/node-notifier": "^5.4.0",
+    "alert-node": "^2.0.3",
+    "dotenv": "^8.2.0",
+    "execa": "^3.3.0",
+    "node-notifier": "^6.0.0",
+    "tslib": "^1"
+  },
+  "devDependencies": {
+    "@types/node": "^10",
+    "ts-node": "^8",
+    "typescript": "^3.3"
+  },
+  "engines": {
+    "node": ">=8.0.0"
+  },
+  "files": [
+    "/bin",
+    "/lib"
+  ],
+  "homepage": "https://github.com/AHDesigns/pomo",
+  "keywords": [
+    "oclif"
+  ],
+  "license": "MIT",
+  "main": "lib/index.js",
+  "oclif": {
+    "bin": "pomo"
+  },
+  "repository": "AHDesigns/pomo",
+  "scripts": {
+    "prepack": "rm -rf lib && tsc -b",
+    "test": "echo NO TESTS"
+  },
+  "types": "lib/index.d.ts"
+}
