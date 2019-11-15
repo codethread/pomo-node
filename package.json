@@ -1,7 +1,7 @@
 {
   "name": "pomo",
   "description": "simple pomodoro timer with slack intergration",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "author": "Adam Hall @AHDesigns",
   "bin": {
     "pomo": "./bin/run"
