@@ -4,9 +4,10 @@ pomo
 simple pomodoro timer with slack intergration
 
 [![oclif](https://img.shields.io/badge/cli-oclif-brightgreen.svg)](https://oclif.io)
-[![Version](https://img.shields.io/npm/v/pomo.svg)](https://npmjs.org/package/pomo)
+[![Version](https://img.shields.io/npm/v/@ahdesigns/pomo.svg)](https://npmjs.org/package/pomo)
 [![Downloads/week](https://img.shields.io/npm/dw/pomo.svg)](https://npmjs.org/package/pomo)
 [![License](https://img.shields.io/npm/l/pomo.svg)](https://github.com/AHDesigns/pomo/blob/master/package.json)
+[![Coding time tracker](https://wakatime.com/badge/github/AHDesigns/pomo.svg)](https://wakatime.com/badge/github/AHDesigns/pomo)
 
 <!-- toc -->
 * [Usage](#usage)
