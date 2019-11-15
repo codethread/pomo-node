@@ -1,17 +1,26 @@
-require('dotenv').config();
+import { promises as fs, constants } from 'fs';
 import { flags as f } from '@oclif/command';
 import {Command} from '@oclif/command'
 import execa from 'execa';
 import os from 'os';
 import alert from 'node-notifier';
 
+type Config = {
+    slack: string;
+};
+
 const delay = (milliseconds: number) => new Promise(resolve => setTimeout(resolve, milliseconds));
 
 class Pomo extends Command {
   static description = 'start a pomodoro timer';
 
+  public configPath = `${os.homedir()}/.pomo-timer.json`
+
+  private tokens: Partial<Config> = {};
+
   static flags = {
     complete: f.boolean({ char: 'c' }),
+    init: f.string({ char: 'i', description: 'where init is your slack token from https://api.slack.com/custom-integrations/legacy-tokens' }),
   };
 
   private execaOptions: execa.Options = { cwd: os.homedir() };
@@ -19,6 +28,20 @@ class Pomo extends Command {
 
   async run() {
     const { flags } = this.parse(Pomo);
+
+    if (flags.init) {
+      await this.envsSet({ slack: flags.init });
+      this.log(`✓ config created at ${this.configPath}`);
+      this.exit(0);
+    }
+
+      this.tokens = await this.envs();
+    if (this.tokens.slack === 'add your token here') {
+      this.log('tokens have not been set up correctly')
+      this.log('please use `--init` flag.')
+      this.log('see `--help` for details')
+      this.exit(1);
+    }
 
     if (flags.complete) {
       await this.end();
@@ -47,29 +70,26 @@ class Pomo extends Command {
   }
 
   async slackStatus(message: string, emoji: string) {
-    const slack = process.env.SLACK
     await this.shell(
-      `SLACK_CLI_TOKEN=${slack} slack status edit --text "${message}" --emoji '${emoji}'`,
+      `SLACK_CLI_TOKEN=${this.tokens.slack} slack status edit --text "${message}" --emoji '${emoji}'`,
       false,
       { shell: true },
     );
   }
 
   async slackPresence(active: 'active' | 'away') {
-    const slack = process.env.SLACK
     await this.shell(
-      `SLACK_CLI_TOKEN=${slack} slack presence ${active}`,
+      `SLACK_CLI_TOKEN=${this.tokens.slack} slack presence ${active}`,
       false,
       { shell: true },
     );
   }
 
   async slackSnooze(mins: number) {
-    const slack = process.env.SLACK
     await this.shell(
       mins === 0
-        ? `SLACK_CLI_TOKEN=${slack} slack snooze end`
-        : `SLACK_CLI_TOKEN=${slack} slack snooze start --minutes ${mins}`,
+        ? `SLACK_CLI_TOKEN=${this.tokens.slack} slack snooze end`
+        : `SLACK_CLI_TOKEN=${this.tokens.slack} slack snooze start --minutes ${mins}`,
       false,
       { shell: true },
     );
@@ -99,6 +119,34 @@ class Pomo extends Command {
     }
     const res = await subprocess;
     return res;
+  }
+
+  async envs(): Promise<Config> {
+    try {
+      const config = await fs.readFile(this.configPath);
+      const json = config.toString();
+      return JSON.parse(json);
+    } catch (e) {
+      if (e.code === 'ENOENT') {
+        const newConfig: Config = {
+          slack: 'add your token here',
+        };
+
+        return newConfig;
+      }
+      throw e;
+    }
+  }
+
+  async envsSet(envs: Partial<Config>): Promise<Config> {
+    const currentEnvs = await this.envs();
+    const newEnvs = {
+      ...currentEnvs,
+      ...envs,
+    };
+
+    await fs.writeFile(this.configPath, JSON.stringify(newEnvs, null, 2));
+    return newEnvs;
   }
 }
 
