@@ -1,7 +1,7 @@
 {
   "name": "@ahdesigns/pomo",
   "description": "simple pomodoro timer with slack intergration",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "repository": "ahdesigns/pomo",
   "bugs": "https://github.com/AHDesigns/pomo/issues",
   "author": "AHDesigns",
