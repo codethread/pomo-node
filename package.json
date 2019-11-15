@@ -1,7 +1,7 @@
 {
   "name": "@ahdesigns/pomo",
   "description": "simple pomodoro timer with slack intergration",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "repository": "ahdesigns/pomo",
   "bugs": "https://github.com/AHDesigns/pomo/issues",
   "author": "AHDesigns",
@@ -11,6 +11,7 @@
   "dependencies": {
     "@oclif/command": "^1",
     "@oclif/config": "^1",
+    "@oclif/dev-cli": "^1.22.2",
     "@oclif/plugin-help": "^2",
     "@types/node-notifier": "^5.4.0",
     "alert-node": "^2.0.3",
@@ -38,10 +39,15 @@
   "license": "MIT",
   "main": "lib/index.js",
   "oclif": {
-    "bin": "pomo"
+    "bin": "pomo",
+    "plugins": [
+      "@oclif/plugin-help"
+    ]
   },
   "scripts": {
-    "prepack": "rm -rf lib && tsc -b",
+    "postpack": "rm -f oclif.manifest.json",
+    "prepack": "rm -rf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
+    "version": "oclif-dev readme && git add README.md",
     "test": "echo NO TESTS"
   },
   "types": "lib/index.d.ts"
