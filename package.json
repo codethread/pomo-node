@@ -1,12 +1,13 @@
 {
-  "name": "pomo",
+  "name": "@ahdesigns/pomo",
   "description": "simple pomodoro timer with slack intergration",
   "version": "0.1.0",
-  "author": "Adam Hall @AHDesigns",
+  "repository": "ahdesigns/pomo",
+  "bugs": "https://github.com/AHDesigns/pomo/issues",
+  "author": "AHDesigns",
   "bin": {
     "pomo": "./bin/run"
   },
-  "bugs": "https://github.com/AHDesigns/pomo/issues",
   "dependencies": {
     "@oclif/command": "^1",
     "@oclif/config": "^1",
@@ -39,7 +40,6 @@
   "oclif": {
     "bin": "pomo"
   },
-  "repository": "AHDesigns/pomo",
   "scripts": {
     "prepack": "rm -rf lib && tsc -b",
     "test": "echo NO TESTS"
