@@ -118,7 +118,11 @@ class Pomo extends Command {
     await this.shell(`afplay /System/Library/Sounds/Glass.aiff`)
     await this.slackStatus('free', ':pickle_rick:');
     await this.slackPresence('active');
-    await this.slackSnooze(0);
+    try {
+      await this.slackSnooze(0);
+    } catch (e) {
+      // ignore
+    }
     await this.envsSet({ timer: 0 });
   }
 
