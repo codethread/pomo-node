@@ -7,7 +7,8 @@ import os from 'os';
 import alert from 'node-notifier';
 
 type Config = {
-    slack: string;
+  slack: string;
+  timer: number;
 };
 
 const delay = (milliseconds: number) => new Promise(resolve => setTimeout(resolve, milliseconds));
@@ -45,7 +46,7 @@ class Pomo extends Command {
       this.exit(0);
     }
 
-      this.tokens = await this.envs();
+    this.tokens = await this.envs();
     if (this.tokens.slack === 'add your token here') {
       this.log('tokens have not been set up correctly')
       this.log('please use `--init` flag.')
@@ -66,6 +67,7 @@ class Pomo extends Command {
       this.error(`argument "minutes" must be a number, you passed: ${minutes}`);
     }
 
+    await this.envsSet({ timer: mins });
     await this.slackStatus(`free in ${mins} mins`, ':tomato:');
     await this.slackPresence('away');
     await this.slackSnooze(mins);
@@ -77,6 +79,7 @@ class Pomo extends Command {
         await this.end();
         clearInterval(timer)
       } else {
+        await this.envsSet({ timer: mins });
         await this.slackStatus(`free in ${mins} mins`, ':tomato:');
       }
     }, 60000);
@@ -101,8 +104,8 @@ class Pomo extends Command {
   async slackSnooze(mins: number) {
     await this.shell(
       mins === 0
-        ? `SLACK_CLI_TOKEN=${this.tokens.slack} slack snooze end`
-        : `SLACK_CLI_TOKEN=${this.tokens.slack} slack snooze start --minutes ${mins}`,
+      ? `SLACK_CLI_TOKEN=${this.tokens.slack} slack snooze end`
+      : `SLACK_CLI_TOKEN=${this.tokens.slack} slack snooze start --minutes ${mins}`,
       false,
       { shell: true },
     );
@@ -143,6 +146,7 @@ class Pomo extends Command {
       if (e.code === 'ENOENT') {
         const newConfig: Config = {
           slack: 'add your token here',
+          timer: 0,
         };
 
         return newConfig;
