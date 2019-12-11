@@ -1,3 +1,4 @@
+import { IArg } from '@oclif/parser/lib/args';
 import { promises as fs, constants } from 'fs';
 import { flags as f } from '@oclif/command';
 import {Command} from '@oclif/command'
@@ -23,11 +24,20 @@ class Pomo extends Command {
     init: f.string({ char: 'i', description: 'where init is your slack token from https://api.slack.com/custom-integrations/legacy-tokens' }),
   };
 
+  static args: IArg[] = [
+    { name: 'minutes',
+      required: false,
+      description: 'number of minutes for pomodoro timer',
+      default: '25',
+    }
+  ]
+
   private execaOptions: execa.Options = { cwd: os.homedir() };
-  private pomoLength = 25;
 
   async run() {
-    const { flags } = this.parse(Pomo);
+    const { flags, args } = this.parse(Pomo);
+
+    const { minutes } = args;
 
     if (flags.init) {
       await this.envsSet({ slack: flags.init });
@@ -51,7 +61,10 @@ class Pomo extends Command {
     this.log('starting new pomo timer');
 
     let timer:any;
-    let mins = this.pomoLength;
+    let mins = parseInt(minutes);
+    if (isNaN(mins)) {
+      this.error(`argument "minutes" must be a number, you passed: ${minutes}`);
+    }
 
     await this.slackStatus(`free in ${mins} mins`, ':tomato:');
     await this.slackPresence('away');
