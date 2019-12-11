@@ -20,7 +20,7 @@ $ npm install -g @ahdesigns/pomo
 $ pomo COMMAND
 running command...
 $ pomo (-v|--version|version)
-@ahdesigns/pomo/1.0.3 darwin-x64 node-v12.4.0
+@ahdesigns/pomo/1.1.0 darwin-x64 node-v12.4.0
 $ pomo --help [COMMAND]
 USAGE
   $ pomo COMMAND
