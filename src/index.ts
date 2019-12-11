@@ -119,6 +119,7 @@ class Pomo extends Command {
     await this.slackStatus('free', ':pickle_rick:');
     await this.slackPresence('active');
     await this.slackSnooze(0);
+    await this.envsSet({ timer: 0 });
   }
 
   async shell(cmd: string, pipeOutput = true, optionOverides?: execa.Options) {
